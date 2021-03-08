@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Employee>
+@inject IEmployeeRepository _empRepository
+@{
+    ViewBag.Title = "Employee List";
+    var count = 0;
+}
+<div class="row justify-content-center m-3">
+    <div class="col-sm-10">
+        <hr />
+        @if (Model !=null)
+        {
+            count = Model.Count();
+        }
+        Total Employee Count By employee list.count() method : @count  <br />
+        <hr />
+        @if (_empRepository.GetAllEmployees() !=null)
+        {
+            count = _empRepository.GetAllEmployees().Count();
+        }
+        Total Employee Count By inject IEmployeeRepository and call  GetAllEmployees() Method: @count
+        <hr />
+
+    </div>
+</div>
+<div class="card-deck">
+    @if (Model !=null)
+    {
+        @foreach (var employee in Model)
+        {
+            var photoPath = "~/img/" + (employee.PhotoPath ?? "no-image.jpg");
+            <div class="card m-3" style="min-width: 18rem; max-width:30.5%;">
+                <div class="card-header">
+                    <h3>@employee.Name</h3>
+                </div>
+                <img class="card-img-top imgCss imageThumbnail" src="@photoPath" asp-append-version="true" />
+                <div class="card-footer text-center">
+                    <a asp-controller="Home" asp-action="Details" asp-route-id="@employee.EncryptedId" class="btn btn-primary m-1">View</a>
+                    <a asp-controller="Home" asp-action="Edit" asp-route-id="@employee.EncryptedId" class="btn btn-primary m-1">Edit</a>
+                    <a asp-controller="Home" asp-action="Delete" asp-route-id="@employee.EncryptedId" class="btn btn-danger m-1">Delete</a>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <h4>Employee not exits</h4>
+    }
+</div>
+
+
